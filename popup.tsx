@@ -7,7 +7,7 @@ function IndexPopup() {
   const [account, setAccount] = useState("")
   const [tag, setTag] = useState("")
   const [result, setResult] = useState("")
-  const [profileSelected, setProfileSelected] = useState("NO PROFILE SELECTED")
+  const [profileSelected, setProfileSelected] = useState("")
   const [savedTags, setSavedTags] = useState([])
 
   useEffect(() => {
@@ -35,9 +35,23 @@ function IndexPopup() {
     }
   }
 
+  async function resetProfile() {
+    const storage = new Storage()
+    storage.set("profile", "")
+  }
+  let lastProfile = ""
   setInterval(async function () {
     const storage = new Storage()
     const profile = await storage.get("profile")
+    if (lastProfile !== profile) {
+      for (let k in savedTags) {
+        const tag = savedTags[k]
+        if (tag.key === profile) {
+          setTag(tag.value)
+        }
+      }
+    }
+    lastProfile = profile
     setProfileSelected(profile)
   }, 100)
 
@@ -71,7 +85,7 @@ function IndexPopup() {
   return (
     <div
       style={{
-        padding: "2px 20px 25px 10px",
+        padding: "10px 20px 25px 10px",
         width: "200px",
         fontFamily: "Helvetica"
       }}>
@@ -87,10 +101,21 @@ function IndexPopup() {
       {isLogged &&
         <div>
           You have saved {savedTags.length} tags.<br></br><hr></hr>
-          <div id="profileSelector">Profile: {profileSelected}</div>
-          <input type="text" placeholder="Tag" style={{ width: "192px" }} onChange={e => setTag(e.target.value)} />
-          <button onClick={saveTag} style={{ width: "100%" }} id="save">Save</button>
-          <div>{result}</div>
+
+          {profileSelected.length > 0 &&
+            <div>
+              <div id="profileSelector">
+                Profile: {profileSelected}
+                <span onClick={resetProfile} style={{ cursor: "pointer" }}>🗑️</span>
+              </div>
+              <input type="text" value={tag} placeholder="Tag" style={{ width: "192px" }} onChange={e => setTag(e.target.value)} />
+              <button onClick={saveTag} style={{ width: "100%" }} id="save">Save</button>
+              <div style={{ width: "100%", textAlign: "center", marginTop: "10px" }}>{result}</div>
+            </div>
+          }
+          {profileSelected.length === 0 &&
+            <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>Hover an username to start.</div>
+          }
         </div>
       }
     </div>

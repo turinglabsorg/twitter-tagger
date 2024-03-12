@@ -84,14 +84,14 @@ function OptionsIndex() {
         }
     }
     return (
-        <div>
+        <div style={{textAlign:"center", padding:"40vh"}}>
             <h1>
-                Welcome to Twitter tagger extension!
+                Welcome to Twitter tagger!
             </h1>
             {!isLogged && !isRedirecting &&
                 <div>
-                    <button onClick={redirectToGoogleWallet}>ENTER USING GOOGLE</button><br></br>
-                    <button onClick={redirectToAppleWallet}>ENTER USING APPLE</button><br></br>
+                    <button onClick={redirectToGoogleWallet} style={{width:"200px"}}>ENTER USING GOOGLE</button><br></br>
+                    <button onClick={redirectToAppleWallet} style={{width:"200px", marginTop:"10px"}}>ENTER USING APPLE</button><br></br>
                 </div>
             }
             {isRedirecting &&
@@ -102,7 +102,7 @@ function OptionsIndex() {
             {isLogged &&
                 <div>
                     <p>Welcome back {account}!</p>
-                    Set highlight color: <br></br>
+                    Set highlight color: <br></br><br></br>
                     <input type="color" value={color} onChange={e => changeColor(e.target.value)} ></input><br></br><br></br>
                     <button onClick={logout}>LOGOUT</button>
                 </div>
