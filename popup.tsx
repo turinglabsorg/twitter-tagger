@@ -15,7 +15,7 @@ function IndexPopup() {
       const storage = new Storage()
       const logged = await storage.get("logged")
       console.log("Is user logged?", logged)
-      if (logged !== undefined) {
+      if (logged !== undefined && logged !== null) {
         setLogged(true)
         setAccount(logged)
         const saved = await axios.get("https://api.umi.tools/store/topic/twittertagger/" + logged)
@@ -39,19 +39,9 @@ function IndexPopup() {
     const storage = new Storage()
     storage.set("profile", "")
   }
-  let lastProfile = ""
   setInterval(async function () {
     const storage = new Storage()
     const profile = await storage.get("profile")
-    if (lastProfile !== profile) {
-      for (let k in savedTags) {
-        const tag = savedTags[k]
-        if (tag.key === profile) {
-          setTag(tag.value)
-        }
-      }
-    }
-    lastProfile = profile
     setProfileSelected(profile)
   }, 100)
 
@@ -74,6 +64,7 @@ function IndexPopup() {
       const updated = await axios.get("https://api.umi.tools/store/topic/twittertagger/" + logged)
       await storage.set("tags", updated.data)
       setSavedTags(updated.data)
+      setTag("")
       setTimeout(function () {
         setResult("")
       }, 2000)
@@ -82,18 +73,20 @@ function IndexPopup() {
       setResult("Error")
     }
   }
+
   return (
     <div
       style={{
         padding: "10px 20px 25px 10px",
         width: "200px",
-        fontFamily: "Helvetica"
+        fontSize: "12px",
+        fontFamily: "Monospace"
       }}>
       <h2>
         Twitter tagger
-        <div onClick={openOptionPage} style={{ position: "fixed", top: "10px", right: "10px", cursor: "pointer" }}>⚙️</div>
+        <div onClick={openOptionPage} style={{ position: "fixed", top: "5px", right: "12px", cursor: "pointer", fontSize: "26px" }}>⚙️</div>
       </h2>
-      {isLogged ? "Welcome back " + account.substring(0, 6) + "!" : "Please sign up to use this extension."}
+      {isLogged && account !== null ? "Welcome back " + account.substring(0, 6) + "!" : "Please sign up to use this extension."}
       <br></br><br></br>
       {!isLogged &&
         <button onClick={openOptionPage}>SIGN UP</button>
@@ -108,8 +101,14 @@ function IndexPopup() {
                 Profile: {profileSelected}
                 <span onClick={resetProfile} style={{ cursor: "pointer" }}>🗑️</span>
               </div>
-              <input type="text" value={tag} placeholder="Tag" style={{ width: "192px" }} onChange={e => setTag(e.target.value)} />
-              <button onClick={saveTag} style={{ width: "100%" }} id="save">Save</button>
+              <input type="text" value={tag} placeholder="Set a new tag" style={{
+                width: "192px",
+                fontFamily: "Monospace"
+              }} onChange={e => setTag(e.target.value)} />
+              <button onClick={saveTag} style={{
+                width: "100%",
+                fontFamily: "Monospace"
+              }} id="save">Save</button>
               <div style={{ width: "100%", textAlign: "center", marginTop: "10px" }}>{result}</div>
             </div>
           }

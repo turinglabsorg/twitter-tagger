@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
+import logo from "data-base64:~assets/icon.png"
 
 function OptionsIndex() {
     const [account, setAccount] = useState("")
@@ -19,7 +20,7 @@ function OptionsIndex() {
             if (color !== undefined) {
                 setColor(color)
             }
-            if (logged !== undefined) {
+            if (logged !== undefined && logged !== null && session !== undefined && session !== null) {
                 setLogged(true)
                 setAccount(logged)
             }
@@ -27,8 +28,6 @@ function OptionsIndex() {
             const loggedAs = url.searchParams.get("loggedAs")
             console.log("Mego wallet callback", loggedAs)
             if (loggedAs !== null) {
-                setLogged(true)
-                setAccount(loggedAs)
                 await storage.set("logged", loggedAs)
                 setIsRedirecting(true)
                 setTimeout(function () {
@@ -84,27 +83,33 @@ function OptionsIndex() {
         }
     }
     return (
-        <div style={{textAlign:"center", padding:"40vh"}}>
+        <div style={{
+            textAlign: "center",
+            padding: "40vh",
+            fontFamily: "Monospace",
+            fontSize: "12px"
+        }}>
             <h1>
-                Welcome to Twitter tagger!
+                <img src={logo} style={{width: "120px"}} /><br></br>
+                Welcome to<br></br>Twitter tagger!
             </h1>
             {!isLogged && !isRedirecting &&
                 <div>
-                    <button onClick={redirectToGoogleWallet} style={{width:"200px"}}>ENTER USING GOOGLE</button><br></br>
-                    <button onClick={redirectToAppleWallet} style={{width:"200px", marginTop:"10px"}}>ENTER USING APPLE</button><br></br>
+                    <button onClick={redirectToGoogleWallet} style={{ width: "200px", fontFamily: "Monospace" }}>ENTER USING GOOGLE</button><br></br>
+                    <button onClick={redirectToAppleWallet} style={{ width: "200px", marginTop: "10px", fontFamily: "Monospace" }}>ENTER USING APPLE</button><br></br>
                 </div>
             }
             {isRedirecting &&
                 <div>
-                    <p>Redirecting to wallet...</p>
+                    <p>Entering, please wait...</p>
                 </div>
             }
             {isLogged &&
                 <div>
                     <p>Welcome back {account}!</p>
-                    Set highlight color: <br></br><br></br>
+                    Set base highlight color: <br></br><br></br>
                     <input type="color" value={color} onChange={e => changeColor(e.target.value)} ></input><br></br><br></br>
-                    <button onClick={logout}>LOGOUT</button>
+                    <button onClick={logout} style={{ width: "200px", marginTop: "10px", fontFamily: "Monospace" }}>LOGOUT</button>
                 </div>
             }
         </div>

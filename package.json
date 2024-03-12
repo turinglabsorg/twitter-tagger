@@ -1,8 +1,8 @@
 {
   "name": "twitter-tag-ext",
-  "displayName": "Twitter tag ext",
-  "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "displayName": "Twitter Tagger",
+  "version": "0.0.2",
+  "description": "A simple extension that allows you to tag users on Twitter",
   "author": "turinglabs",
   "scripts": {
     "dev": "plasmo dev",
