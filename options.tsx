@@ -5,6 +5,8 @@ function OptionsIndex() {
     const [account, setAccount] = useState("")
     const [isLogged, setLogged] = useState(false)
     const [isRedirecting, setIsRedirecting] = useState(false)
+    const [color, setColor] = useState("black")
+
     useEffect(() => {
         const initComponent = async () => {
             const storage = new Storage()
@@ -12,13 +14,18 @@ function OptionsIndex() {
             console.log("Is user logged?", logged)
             const session = await storage.get("session")
             console.log("There is session?", session)
+            const color = await storage.get("color")
+            console.log("Color", color)
+            if (color !== undefined) {
+                setColor(color)
+            }
             if (logged !== undefined) {
                 setLogged(true)
                 setAccount(logged)
             }
             const url = new URL(window.location.href)
             const loggedAs = url.searchParams.get("loggedAs")
-            console.log("Logged as", loggedAs)
+            console.log("Mego wallet callback", loggedAs)
             if (loggedAs !== null) {
                 setLogged(true)
                 setAccount(loggedAs)
@@ -56,6 +63,26 @@ function OptionsIndex() {
         setLogged(false)
         setAccount("")
     }
+    let lastChanged = 0
+    let lastColor = ""
+    let interval
+    async function changeColor(color) {
+        lastChanged = Date.now()
+        if (interval === undefined) {
+            interval = setInterval(async function () {
+                const now = Date.now()
+                const elapsed = now - lastChanged
+                setColor(color)
+                if (elapsed > 1500 && lastColor !== color) {
+                    lastColor = color
+                    const storage = new Storage()
+                    await storage.set("color", color)
+                    console.log("Color changed to", color)
+                    clearInterval(interval)
+                }
+            }, 200)
+        }
+    }
     return (
         <div>
             <h1>
@@ -75,6 +102,8 @@ function OptionsIndex() {
             {isLogged &&
                 <div>
                     <p>Welcome back {account}!</p>
+                    Set highlight color: <br></br>
+                    <input type="color" value={color} onChange={e => changeColor(e.target.value)} ></input><br></br><br></br>
                     <button onClick={logout}>LOGOUT</button>
                 </div>
             }

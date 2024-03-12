@@ -28,6 +28,10 @@ try {
                 name: "get"
             })
             console.log("Saved tags", saved.message)
+            const color = await sendToBackgroundViaRelay({
+                name: "color"
+            })
+            console.log("Color", color.message)
             for(let k in saved.message) {
                 const tag = saved.message[k]
                 tags[tag.key] = tag.value
@@ -39,7 +43,7 @@ try {
                 if (spans[k].innerText !== undefined && spans[k].innerText.indexOf("@") === 0) {
                     // console.log("Found account:", spans[k].innerText)
                     const account = spans[k].innerText.split("|")[0].trim()
-                    spans[k].style.color = "red"
+                    spans[k].style.color = (color.message !== undefined && color.message !== "" ? color.message : "red")
                     spans[k].style.fontWeight = "bold"
                     if (accounts[account] === undefined) {
                         accounts[account] = account

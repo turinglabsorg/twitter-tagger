@@ -71,11 +71,13 @@ function IndexPopup() {
   return (
     <div
       style={{
-        padding: "10px 20px 25px 10px",
-        width: "200px"
+        padding: "2px 20px 25px 10px",
+        width: "200px",
+        fontFamily: "Helvetica"
       }}>
       <h2>
         Twitter tagger
+        <div onClick={openOptionPage} style={{ position: "fixed", top: "10px", right: "10px", cursor: "pointer" }}>⚙️</div>
       </h2>
       {isLogged ? "Welcome back " + account.substring(0, 6) + "!" : "Please sign up to use this extension."}
       <br></br><br></br>
@@ -85,9 +87,9 @@ function IndexPopup() {
       {isLogged &&
         <div>
           You have saved {savedTags.length} tags.<br></br><hr></hr>
-          <div id="profileSelector">{profileSelected}</div>
-          <input type="text" placeholder="Tag" onChange={e => setTag(e.target.value)} /><br></br>
-          <button onClick={saveTag} id="save">Save</button>
+          <div id="profileSelector">Profile: {profileSelected}</div>
+          <input type="text" placeholder="Tag" style={{ width: "192px" }} onChange={e => setTag(e.target.value)} />
+          <button onClick={saveTag} style={{ width: "100%" }} id="save">Save</button>
           <div>{result}</div>
         </div>
       }
