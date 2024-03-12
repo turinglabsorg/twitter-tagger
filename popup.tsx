@@ -59,7 +59,7 @@ function IndexPopup() {
       setResult(saved.data.message)
       const updated = await axios.get("https://api.umi.tools/store/topic/twittertagger/" + logged)
       await storage.set("tags", updated.data)
-      setSavedTags(saved.data)
+      setSavedTags(updated.data)
       setTimeout(function () {
         setResult("")
       }, 2000)
