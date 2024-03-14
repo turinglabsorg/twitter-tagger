@@ -93,9 +93,9 @@ function IndexPopup() {
       }
       {isLogged &&
         <div>
-          You have saved {savedTags.length} tags.<br></br><hr></hr>
+          You have saved {savedTags?.length} tags.<br></br><hr></hr>
 
-          {profileSelected.length > 0 &&
+          {profileSelected?.length > 0 &&
             <div>
               <div id="profileSelector">
                 Profile: {profileSelected}
@@ -112,7 +112,7 @@ function IndexPopup() {
               <div style={{ width: "100%", textAlign: "center", marginTop: "10px" }}>{result}</div>
             </div>
           }
-          {profileSelected.length === 0 &&
+          {profileSelected?.length === 0 &&
             <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>Hover an username to start.</div>
           }
         </div>
