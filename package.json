@@ -1,7 +1,7 @@
 {
   "name": "twitter-tag-ext",
   "displayName": "Twitter Tagger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple extension that allows you to tag users on Twitter",
   "author": "turinglabs",
   "scripts": {

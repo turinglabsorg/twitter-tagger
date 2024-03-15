@@ -27,31 +27,33 @@ try {
             const saved = await sendToBackgroundViaRelay({
                 name: "get"
             })
-            console.log("Saved tags", saved.message)
+            // console.log("Saved tags", saved.message)
             const color = await sendToBackgroundViaRelay({
                 name: "color"
             })
-            console.log("Color", color.message)
-            for(let k in saved.message) {
+            // console.log("Color", color.message)
+            for (let k in saved.message) {
                 const tag = saved.message[k]
                 tags[tag.key] = tag.value
             }
             const account = logged.message
-            console.log("Logged as", account)
-            const spans = document.querySelectorAll("span")
-            for (let k in spans) {
-                if (spans[k].innerText !== undefined && spans[k].innerText.indexOf("@") === 0) {
-                    // console.log("Found account:", spans[k].innerText)
-                    const account = spans[k].innerText.split("|")[0].trim()
-                    spans[k].style.color = (color.message !== undefined && color.message !== "" ? color.message : "red")
-                    spans[k].style.fontWeight = "bold"
-                    if (accounts[account] === undefined) {
-                        accounts[account] = account
-                    }
-                    spans[k].innerText = accounts[account] + " | " + (tags[account] !== undefined ? tags[account] : "No tag")
-                    spans[k].onmouseover = function () {
-                        console.log("Hover account", account)
-                        selectProfile(account)
+            // console.log("Logged as", account)
+            if (document.querySelector('section') !== null) {
+                const spans = document.querySelector('section').querySelectorAll("span")
+                for (let k in spans) {
+                    if (spans[k].innerText !== undefined && spans[k].innerText.indexOf("@") === 0) {
+                        // console.log("Found account:", spans[k].innerText)
+                        const account = spans[k].innerText.split("|")[0].trim()
+                        spans[k].style.color = (color.message !== undefined && color.message !== "" ? color.message : "red")
+                        spans[k].style.fontWeight = "bold"
+                        if (accounts[account] === undefined) {
+                            accounts[account] = account
+                        }
+                        spans[k].innerText = accounts[account] + " | " + (tags[account] !== undefined ? tags[account] : "No tag")
+                        spans[k].onmouseover = function () {
+                            console.log("Hover account", account)
+                            selectProfile(account)
+                        }
                     }
                 }
             }
